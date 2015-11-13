@@ -15,6 +15,7 @@
     "body-parser": "^1.14.1",
     "express": "^4.13.3",
     "express-partials": "^0.3.0",
+    "fitbit-client-oauth2": "^2.0.2",
     "jshint-stylish": "^0.2.0",
     "pg": "^4.4.3",
     "pg-hstore": "^2.3.2",

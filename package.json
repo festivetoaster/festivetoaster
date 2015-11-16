@@ -3,7 +3,9 @@
   "version": "0.0.1",
   "description": "",
   "main": "server/server.js",
-  "start": "node server/server.js",
+  "scripts": {
+    "start": "node server/server.js"
+  }
   "author": "festive-toasters",
   "license": "MIT",
   "dependencies": {

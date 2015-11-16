@@ -1,4 +1,3 @@
-// var morgan = require('morgan'); // used for logging incoming request
 var partials = require('express-partials');
 var bodyParser = require('body-parser');
 var helpers = require('./helpers.js'); // our custom middleware
@@ -14,7 +13,7 @@ var FACEBOOK_APP_SECRET = "94fb8b098c0b2ffcd7287f1a00dcd05a";
 var partials = require('express-partials');
 
 module.exports = function (app, express) {
-  // Express 4 allows us to use multiple routers with their own configurations
+
   var userRouter = express.Router();
   var apiRouter = express.Router();
 
@@ -22,7 +21,6 @@ module.exports = function (app, express) {
   app.set('view engine', 'ejs');
   app.use(partials());
 
-  // app.use(morgan('dev'));
   app.use(bodyParser.urlencoded({extended: true}));
   app.use(bodyParser.json());
   app.use(express.static(__dirname + '/../../client'));
@@ -44,8 +42,10 @@ module.exports = function (app, express) {
     done(null, user.id);
   });
 
-  passport.deserializeUser(function (obj, done) {
-    done(null, obj);
+  passport.deserializeUser(function (id, done) {
+    db.User.findOne({ where: {fbID: id} }).then(function(user) {
+      done(null, user);
+    });
   });
 
   passport.use(new FacebookStrategy({
@@ -64,7 +64,6 @@ module.exports = function (app, express) {
           fbID: profile.id
         }})
         .then(function (user, created) {
-          console.log('user in create ' + JSON.stringify(user));
           // console.log(user.get({
           //   plain: true
           // }));
@@ -95,8 +94,7 @@ module.exports = function (app, express) {
         }
       })
       .then(function (user) {
-      res.session.user = user.id;
-      res.redirect('/dashboard');
+        res.redirect('/dashboard');
       });
     });
 
@@ -132,49 +130,60 @@ module.exports = function (app, express) {
   var client = new FitbitClient('22B2V3', '1fb7088fd54576f1025f23a88d03f371');
   var redirect_uri = 'http://localhost:8000/auth/fitbit/callback';
   var scope =  [ 'activity' ];
-  console.log('client =', client);
-  app.get('/auth/fitbit', function(req, res, next) {
-        
+
+  app.get('/auth/fitbit', 
+    function(req, res, next) {
       var authorization_uri = client.getAuthorizationUrl(redirect_uri, scope);
-      
       res.redirect(authorization_uri);
   }); 
         
-  app.get('/auth/fitbit/callback', function(req, res, next) {
-  
-      var code = req.query.code;
-      // console.log('code =', code);
-      
-      client.getToken(code, redirect_uri)
-          .then(function(token) {
-            token = token.token;
-            //write access token and refresh token to database under this user
-
-              // ... save your token on db or session... 
-              // console.log('token =', token);
-              // then redirect
-              res.end();
-              // res.redirect(302, '/user');
-  
-          })
-          .catch(function(err) {
-              console.log('error');
-              // something went wrong.
-              res.send(500, err);
-          
+  app.get('/auth/fitbit/callback', ensureAuthenticated, function(req, res, next) {
+    var code = req.query.code;
+    client.getToken(code, redirect_uri)
+    .then(function(token) {
+      token = token.token;
+      db.User.findOne({ where: {fbID: req.user.dataValues.fbID} })
+      .then(function(user) {
+          db.AccountFitBit.findOrCreate({ 
+            where: { 
+              fitBitID: token.user_id} })
+          .then(function(account) {
+            db.AccountFitBit.findOne({fitBitID: token.user_id})
+            .then(function(account) {
+              account.update({
+                fitBitAccessToken: token.access_token, 
+                fitBitRefreshToken: token.refresh_token})
+              .then(function(accountObj) {
+                client.getTimeSeries({
+                  access_token: token.access_token,
+                  refresh_token: token.refresh_token})
+                .then(function(results) {
+                  db.AccountFitBit.findOne({fitBitID: token.user_id})
+                  .then(function(account) {
+                    account.update({
+                      latestSteps: results['activities-steps'][0].value, 
+                      latestStepsTimeStamp: results['activities-steps'][0].dateTime})
+                    .then(function(accountObj) {
+                      // console.log('accountOBj.dataValues =', accountObj.dataValues);
+                      // console.log('results: ', results);
+                      res.redirect('/dashboard');
+                    });
+                  })
+                })
+                .catch(function(err) {
+                    console.log('error getting user data', err);
+                    res.send(500, err);
+                });
+              });
+            });
           });
-  
+      });
+    })
+    .catch(function(err) {
+        console.log('error getting token');
+        res.send(500, err);
+    });
   });
-
-  client.getTimeSeries({
-    access_token: 'eyJhbGciOiJIUzI1NiJ9.eyJleHAiOjE0NDc0NTg2OTgsInNjb3BlcyI6InJhY3QiLCJzdWIiOiIzVFhYOVkiLCJhdWQiOiIyMkIyVjMiLCJpc3MiOiJGaXRiaXQiLCJ0eXAiOiJhY2Nlc3NfdG9rZW4iLCJpYXQiOjE0NDc0NTUwOTh9.cCSVtp50UpjnRm_p1bjxyQBkv1oJlQ6pQJ6CNU_qWxA'})
-  .then(function(res) {
-      // console.log('resultsasdfasdfas: ', res);
-  }).catch(function(err) {
-      // console.log('error getting user data', err);
-  });
-
-  
 
   //////////////////////////////
   //                          //
@@ -182,19 +191,27 @@ module.exports = function (app, express) {
   //                          //
   //////////////////////////////
 
-  app.get('/', function (req, res) {
+  app.get('/', 
+    ensureAuthenticated,
+    function (req, res) {
     res.render('index');
   });
 
-  app.get('/dashboard', function (req, res) {
+  app.get('/dashboard', 
+    ensureAuthenticated,
+    function (req, res) {
     res.render('index');
   });
 
-  app.get('/profile', function (req, res) {
+  app.get('/profile', 
+    ensureAuthenticated,
+    function (req, res) {
     res.render('profile');
   });
 
-  app.get('/connect', function (req, res) {
+  app.get('/connect', 
+    ensureAuthenticated,
+    function (req, res) {
     res.render('connect');
   });
 
@@ -204,17 +221,21 @@ module.exports = function (app, express) {
 
   app.use(express.static(__dirname + '/../../client'));
 
-  app.use('/users', userRouter); // use user router for all user request
+  app.use('/users', userRouter); 
 
-  // authentication middleware used to decode token and made available on the request
-  //app.use('/api/links', helpers.decode);
-  app.use('/api', apiRouter); // user link router for link request
+  app.use('/api', apiRouter);
   app.use(helpers.errorLogger);
   app.use(helpers.errorHandler);
 
   // inject our routers into their respective route files
   require('../controllers/userRoutes.js')(userRouter);
   require('../controllers/apiRoutes.js')(apiRouter);
+
+  app.get('*',
+    ensureAuthenticated,
+    function(req, res) {
+      res.render('index')
+    });
 };
 
 

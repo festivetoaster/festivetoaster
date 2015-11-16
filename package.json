@@ -4,7 +4,7 @@
   "description": "",
   "main": "server/server.js",
   "scripts": {
-    "start": "node server/server.js"
+    "start": "npm install; bower install --allow-root; node server/server.js"
   },
   "author": "festive-toasters",
   "license": "MIT",

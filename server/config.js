@@ -1,5 +1,4 @@
 var Sequelize = require("sequelize");
-var dbConfig = require('./dbConfig');
 var match; 
 if(process.env.DATABASE_URL) {
   match = process.env.DATABASE_URL.match(/postgres:\/\/([^:]+):([^@]+)@([^:]+):(\d+)\/(.+)/) ;
@@ -18,6 +17,7 @@ if ( process.env.DATABASE_URL ) {
     }
   });
 } else {
+var dbConfig = require('./dbConfig');
   sequelize = new Sequelize('nowdb', dbConfig.username, dbConfig.password, {
     host: 'localhost',
     dialect: 'postgres',

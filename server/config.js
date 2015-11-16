@@ -1,17 +1,33 @@
 var Sequelize = require("sequelize");
 var dbConfig = require('./dbConfig');
+var match; 
+if(process.env.DATABASE_URL) {
+  match = process.env.DATABASE_URL.match(/postgres:\/\/([^:]+):([^@]+)@([^:]+):(\d+)\/(.+)/) ;
+} 
+var sequelize;
 
-var sequelize = new Sequelize('nowdb', dbConfig.username, dbConfig.password, {
-  host: 'localhost',
-  dialect: 'postgres',
-
-  pool: {
-    max: 5,
-    min: 0,
-    idle: 10000
-  }
-
-});
+if ( process.env.DATABASE_URL ) {
+  sequelize = new Sequelize(match[5], match[1], match[2], {
+    dialect:  'postgres',
+    protocol: 'postgres',
+    port:     match[4],
+    host:     match[3],
+    logging: false,
+    dialectOptions: {
+        ssl: true
+    }
+  });
+} else {
+  sequelize = new Sequelize('nowdb', dbConfig.username, dbConfig.password, {
+    host: 'localhost',
+    dialect: 'postgres',
+    pool: {
+      max: 5,
+      min: 0,
+      idle: 10000
+    }
+  });
+}
 
 // we define the models we need using js--we don't need a schema file
 var User = sequelize.define('User', {

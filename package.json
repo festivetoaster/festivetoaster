@@ -31,6 +31,7 @@
     "sequelize": "^3.13.0"
   },
   "devDependencies": {
+    "bower": "^1.6.5",
     "grunt": "^0.4.5",
     "grunt-contrib-jshint": "^0.11.3"
   }

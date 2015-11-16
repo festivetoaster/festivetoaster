@@ -21,17 +21,17 @@ module.exports = {
           if ( fitBitAccount ) {
             userArray.push({
               userID: user.id,
-              name: user.username,
+              name: user.username/*,
               steps: fitBitAccount.latestSteps,
-              stepsDate: fitBitAccount.latestStepsTimeStamp
+              stepsDate: fitBitAccount.latestStepsTimeStamp*/
             });
           }
+          console.log('user array is equal to ' + userArray);
         })
-        .catch( function(err) {
-          console.error(err);
-        });
-      });
-    })
+        // .catch( function(err) {
+        //   console.error(err);
+        // });
+      })
     .then(function () {
       console.log('userArray is ' + userArray);
       res.send( JSON.stringify(userArray) );
@@ -39,6 +39,7 @@ module.exports = {
     .catch( function (err) {
       console.error(err);
     });
+  });
   },
 
   newTile: function () {

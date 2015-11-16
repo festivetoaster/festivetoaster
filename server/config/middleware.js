@@ -96,21 +96,31 @@ module.exports = function (app, express) {
       });
     });
 
-  // app.get('/users', function (req, res) {
-  //   res.send(JSON.stringify([{
-  //     name: 'Jackson Sharf',
-  //     steps: 500,
-  //     date: Date.now() + 500},
-  //     {
-  //       name: 'Lucas Ruprecht',
-  //       steps: 1000,
-  //       date: Date.now() + 1000},
-  //     {
-  //       name: 'Yoshi Sushi',
-  //       steps: 10,
-  //       date: Date.now()}
-  //     ]));
-  // });
+  app.get('/users', function (req, res) {
+    res.send(JSON.stringify([
+      {
+        name: 'Jackson Sharf',
+        steps: 500,
+        tweet: 'Coding is fun',
+        gitCommit: 'Checking in some sweet code',
+        book: 'Harry Potter',
+        date: Date.now() + 500},
+      {
+        name: 'Lucas Ruprecht',
+        steps: 1000,
+        tweet: 'Coding is super fun',
+        gitCommit: 'Checking in some mostly broken code',
+        book: 'The Bible',
+        date: Date.now() + 1000},
+      {
+        name: 'Yoshi Sushi',
+        steps: 10,
+        tweet: 'Code Code Code',
+        gitCommit: 'Checking in some slick front end updates',
+        book: 'Kafka on the Shore',
+        date: Date.now()}
+      ]));
+  });
 
   //////////////////////////////
   //                          //
@@ -152,24 +162,20 @@ module.exports = function (app, express) {
                       fitBitAccessToken: token.access_token, 
                       fitBitRefreshToken: token.refresh_token,
                       UserId: user.id
-                    })
-                    .then(function(accountObj) {
-                      // console.log('accountOBj.dataValues =', accountObj.dataValues);
-                      // console.log('results: ', results);
-                      res.redirect('/dashboard');
                     });
                   })
-                // })
-                .catch(function(err) {
-                    console.log('error getting user data', err);
-                    res.send(500, err);
-                });
-              });
-            // });
-
+                  .then(function(accountObj) {
+                    // console.log('accountOBj.dataValues =', accountObj.dataValues);
+                    // console.log('results: ', results);
+                    res.redirect('/dashboard');
+                  });
+          })
+          .catch(function(err) {
+              console.log('error getting user data', err);
+              res.send(500, err);
           });
-      })
-    // })
+        });
+    })
     .catch(function(err) {
         console.log('error getting token');
         res.send(500, err);

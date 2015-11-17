@@ -122,7 +122,7 @@ module.exports = function (app, express) {
 
 
   var client = new FitbitClient('22B2V3', '1fb7088fd54576f1025f23a88d03f371');
-  var redirect_uri = serve + '/auth/fitbit/callback';
+  var redirect_uri = serve + 'auth/fitbit/callback';
   var scope =  [ 'activity' ];
   
   app.get('/auth/fitbit', 

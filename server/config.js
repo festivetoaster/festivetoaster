@@ -98,7 +98,7 @@ User.hasOne(AccountGitHub);
 // to drop any existing user and message tables and make new ones.
 sequelize.sync({force:true});
 
-
+exports.sequelize = sequelize;
 exports.User = User;
 // exports.AccountFB = AccountFB;
 exports.AccountFitBit = AccountFitBit;

@@ -104,7 +104,7 @@ module.exports = function (app, express) {
       {
         name: 'Jackson Sharf',
         latest: 'Tweet: \nCoding is fun',
-        steps: 500,
+        steps: 5603,
         tweet: 'Coding is fun',
         gitCommit: 'Checking in some sweet code',
         bookUrl: 'https://upload.wikimedia.org/wikipedia/en/c/c7/Harry_Potter_and_the_Goblet_of_Fire.jpg',
@@ -112,7 +112,7 @@ module.exports = function (app, express) {
         date: Date.now() + 500},
       {
         name: 'Lucas Ruprecht',
-        steps: 1000,
+        steps: 5403,
         tweet: 'Coding is super fun',
         gitCommit: 'Checking in some mostly broken code',
         bookUrl: 'http://www.hubertuy.com/wp-content/uploads/2015/02/holy-bible-cover.jpg',
@@ -121,7 +121,7 @@ module.exports = function (app, express) {
         date: Date.now() + 1000},
       {
         name: 'Yoshio Goto',
-        steps: 23694,
+        steps: 7029,
         tweet: 'Code Code Code',
         gitCommit: 'Checking in some slick front end updates',
         book: 'Kafka on the Shore',

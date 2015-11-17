@@ -98,6 +98,7 @@ module.exports = function (app, express) {
       });
     });
 
+  //dummy data
   app.get('/users', function (req, res) {
     res.send(JSON.stringify([
       {
@@ -136,19 +137,24 @@ module.exports = function (app, express) {
   //                          //
   //////////////////////////////
 
-
+  // fitbit-client-oauth2 client object - from a npm - good documentation
   var client = new FitbitClient('22B2V3', '1fb7088fd54576f1025f23a88d03f371');
+  //First and second params being passed in above are fitbit ID's to connect with API.  You have to make a fitbit developer account for access
   var redirect_uri = serve + 'auth/fitbit/callback';
   var scope =  [ 'activity' ];
   
+  //similar to facebook with passport, here we redirect to an authorizationUrl that we get from the fitbit-client-oauth2 npm
   app.get('/auth/fitbit', 
     function(req, res, next) {
       var authorization_uri = client.getAuthorizationUrl(redirect_uri, scope);
       res.redirect(authorization_uri);
   }); 
 
+
+  //after a successful sign in to fitbit, the user will be sent back to this endpoint (Specified on your fitbit developer website)
   app.get('/auth/fitbit/callback', ensureAuthenticated, function(req, res, next) {
     var code = req.query.code;
+    //fitbit oauth function to get a user token containing session keys
     client.getToken(code, redirect_uri)
     .then(function(token) {
       token = token.token;
@@ -159,6 +165,7 @@ module.exports = function (app, express) {
               fitBitID: token.user_id} })
           .spread(function(account, created) {
               console.log('second account down is ' + JSON.stringify(account.dataValues));
+                //fitbit oauth npm function to query for data
                 client.getTimeSeries({
                   access_token: token.access_token,
                   refresh_token: token.refresh_token})
@@ -240,6 +247,7 @@ module.exports = function (app, express) {
   app.use(helpers.errorHandler);
 
   // inject our routers into their respective route files
+  //routes are being minimally used at the moment, look to refactor code from this file into the controllers
   require('../controllers/userRoutes.js')(userRouter);
   require('../controllers/apiRoutes.js')(apiRouter);
 

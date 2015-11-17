@@ -119,8 +119,8 @@ module.exports = function (app, express) {
         latest: 'The Bible',
         date: Date.now() + 1000},
       {
-        name: 'Yoshi Sushi',
-        steps: 10,
+        name: 'Yoshio Goto',
+        steps: 23694,
         tweet: 'Code Code Code',
         gitCommit: 'Checking in some slick front end updates',
         book: 'Kafka on the Shore',

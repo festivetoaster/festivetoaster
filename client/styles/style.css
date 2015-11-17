@@ -80,3 +80,20 @@ input {
   border: none;
   background: none;
 }
+
+.btn-hacky {
+  width: 25%;
+  margin: auto;
+}
+
+.goodreads {
+  font-family: Arial, Sans-Serif;
+  font-size: 26px;
+  line-height: 25px;
+  vertical-align: middle;
+}
+
+.btn-goodreads {
+  color: #fff;
+  background-color: #3ABA79;
+}

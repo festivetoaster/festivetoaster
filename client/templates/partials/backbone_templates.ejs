@@ -77,9 +77,31 @@
 <script id='connect' type='text/x-handlebars-template'>
   <br>
   <br>
-  <h2>Connect your accounts</h2>
+  <h2 class="text-center">Connect your accounts</h2>
+    <br>
     <form id="fitbit" action="/auth/fitbit" method="get">
         <input type="submit" value="Connect to Fitbit">
+    </form>
+    <br>
+    <form action="/auth/github" method="get">
+      <a class="btn btn-block btn-social btn-github btn-hacky">
+        <span class="fa fa-github"></span>
+        Connect to GitHub
+      </a>
+    </form>
+    <br>
+    <form action="/auth/twitter" method="get">
+        <a class="btn btn-block btn-social btn-twitter btn-hacky">
+          <span class="fa fa-twitter"></span>
+          Connect to Twitter
+        </a>
+    </form>
+    <br>
+    <form action="/auth/goodreads" method="get">
+        <a class="btn btn-block btn-social btn-goodreads btn-hacky">
+          <span class="goodreads">g</span>
+            Connect to Goodreads
+        </a>
     </form>
   </div>
 </script>

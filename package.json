@@ -4,8 +4,7 @@
   "description": "",
   "main": "server/server.js",
   "scripts": {
-    "start": "npm install; node server/server.js",
-    "install": "bower install"
+    "start": "npm install; bower install; node server/server.js",
   },
   "author": "festive-toasters",
   "license": "MIT",

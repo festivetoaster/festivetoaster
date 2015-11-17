@@ -5,7 +5,7 @@
   "main": "server/server.js",
   "scripts": {
     "start": "npm install; node server/server.js",
-    "postinstall": "bower install && grunt"
+    "postinstall": "bower install"
   },
   "author": "festive-toasters",
   "license": "MIT",

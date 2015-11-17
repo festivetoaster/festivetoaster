@@ -4,7 +4,8 @@
   "description": "",
   "main": "server/server.js",
   "scripts": {
-    "start": "npm install; bower install --allow-root; node server/server.js"
+    "start": "npm install; node server/server.js",
+    "postinstall": "bower install && grunt"
   },
   "author": "festive-toasters",
   "license": "MIT",

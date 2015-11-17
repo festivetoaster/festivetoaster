@@ -123,9 +123,9 @@ module.exports = function (app, express) {
         steps: 23694,
         tweet: 'Code Code Code',
         gitCommit: 'Checking in some slick front end updates',
-        book: 'Book: \nKafka on the Shore',
+        book: 'Kafka on the Shore',
         bookUrl: 'http://ecx.images-amazon.com/images/I/418ybjvpCPL._SY344_BO1,204,203,200_.jpg',
-        latest: 'Kafka on the Shore',
+        latest: 'Book: \nKafka on the Shore',
         date: Date.now()}
       ]));
   });

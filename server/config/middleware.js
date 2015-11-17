@@ -98,31 +98,31 @@ module.exports = function (app, express) {
       });
     });
 
-  app.get('/users', function (req, res) {
-    res.send(JSON.stringify([
-      {
-        name: 'Jackson Sharf',
-        steps: 500,
-        tweet: 'Coding is fun',
-        gitCommit: 'Checking in some sweet code',
-        book: 'Harry Potter',
-        date: Date.now() + 500},
-      {
-        name: 'Lucas Ruprecht',
-        steps: 1000,
-        tweet: 'Coding is super fun',
-        gitCommit: 'Checking in some mostly broken code',
-        book: 'The Bible',
-        date: Date.now() + 1000},
-      {
-        name: 'Yoshi Sushi',
-        steps: 10,
-        tweet: 'Code Code Code',
-        gitCommit: 'Checking in some slick front end updates',
-        book: 'Kafka on the Shore',
-        date: Date.now()}
-      ]));
-  });
+  // app.get('/users', function (req, res) {
+  //   res.send(JSON.stringify([
+  //     {
+  //       name: 'Jackson Sharf',
+  //       steps: 500,
+  //       tweet: 'Coding is fun',
+  //       gitCommit: 'Checking in some sweet code',
+  //       book: 'Harry Potter',
+  //       date: Date.now() + 500},
+  //     {
+  //       name: 'Lucas Ruprecht',
+  //       steps: 1000,
+  //       tweet: 'Coding is super fun',
+  //       gitCommit: 'Checking in some mostly broken code',
+  //       book: 'The Bible',
+  //       date: Date.now() + 1000},
+  //     {
+  //       name: 'Yoshi Sushi',
+  //       steps: 10,
+  //       tweet: 'Code Code Code',
+  //       gitCommit: 'Checking in some slick front end updates',
+  //       book: 'Kafka on the Shore',
+  //       date: Date.now()}
+  //     ]));
+  // });
 
   //////////////////////////////
   //                          //

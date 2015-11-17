@@ -12,6 +12,8 @@ var FACEBOOK_APP_SECRET = "94fb8b098c0b2ffcd7287f1a00dcd05a";
 
 var partials = require('express-partials');
 
+var serve = process.env.HOSTY || "http://localhost:8000/"
+
 module.exports = function (app, express) {
 
   var userRouter = express.Router();
@@ -51,7 +53,7 @@ module.exports = function (app, express) {
   passport.use(new FacebookStrategy({
     clientID: FACEBOOK_APP_ID,
     clientSecret: FACEBOOK_APP_SECRET,
-    callbackURL: "http://localhost:8000/auth/facebook/callback"
+    callbackURL: serve + "auth/facebook/callback"
   },
     function (accessToken, refreshToken, profile, done) {
       // To keep the example simple, the user's Facebook profile is returned to
@@ -130,7 +132,7 @@ module.exports = function (app, express) {
 
 
   var client = new FitbitClient('22B2V3', '1fb7088fd54576f1025f23a88d03f371');
-  var redirect_uri = 'http://localhost:8000/auth/fitbit/callback';
+  var redirect_uri = serve + 'auth/fitbit/callback';
   var scope =  [ 'activity' ];
   
   app.get('/auth/fitbit', 

@@ -13,17 +13,17 @@ module.exports = {
     console.log('hitting getUsers');
     db.User.findAll()
     .then(function (allUsers) {
-      allUsers.forEach(function (user) {
-        db.AccountFitBit.findOne({
+      db.sequelize.Promise.each(allUsers, function (user) {
+        return db.AccountFitBit.findOne({
           where: { UserId: user.id }
         })
         .then(function (fitBitAccount) {
           if ( fitBitAccount ) {
             userArray.push({
               userID: user.id,
-              name: user.username/*,
+              name: user.username,
               steps: fitBitAccount.latestSteps,
-              stepsDate: fitBitAccount.latestStepsTimeStamp*/
+              stepsDate: fitBitAccount.latestStepsTimeStamp
             });
           }
           console.log('user array is equal to ' + userArray);
